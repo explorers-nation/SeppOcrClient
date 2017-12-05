@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class RockRatsClient
+Partial Class SeppOcrClient
     Inherits Global.System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,7 +23,7 @@ Partial Class RockRatsClient
     <Global.System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(RockRatsClient))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SeppOcrClient))
         Me.JourneyDir = New System.DirectoryServices.DirectoryEntry()
         Me.FolderBrowser = New System.Windows.Forms.FolderBrowserDialog()
         Me.CommsTimer = New System.Windows.Forms.Timer(Me.components)
@@ -61,6 +61,8 @@ Partial Class RockRatsClient
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.SoftDataTab = New System.Windows.Forms.TabPage()
+        Me.ScanningPanel = New System.Windows.Forms.Panel()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.IgtLabel = New System.Windows.Forms.Label()
         Me.TickLabel = New System.Windows.Forms.Label()
         Me.Clock = New System.Windows.Forms.TextBox()
@@ -82,8 +84,6 @@ Partial Class RockRatsClient
         Me.AlwaysOnTopCheckbox = New System.Windows.Forms.CheckBox()
         Me.Tabs = New System.Windows.Forms.TabControl()
         Me.ClockTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.ScanningPanel = New System.Windows.Forms.Panel()
-        Me.Label5 = New System.Windows.Forms.Label()
         CType(Me.EDCapture, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.LogTab.SuspendLayout()
         Me.SettingsTab.SuspendLayout()
@@ -91,9 +91,9 @@ Partial Class RockRatsClient
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.SoftDataTab.SuspendLayout()
+        Me.ScanningPanel.SuspendLayout()
         CType(Me.SoftDataGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tabs.SuspendLayout()
-        Me.ScanningPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'CommsTimer
@@ -146,7 +146,7 @@ Partial Class RockRatsClient
         Me.UpdateBgsData.Size = New System.Drawing.Size(61, 46)
         Me.UpdateBgsData.TabIndex = 25
         Me.UpdateBgsData.Text = "Send Data"
-        Me.ToolTip1.SetToolTip(Me.UpdateBgsData, "Update RockRats Soft Data" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Only available when Influence Total is 100%")
+        Me.ToolTip1.SetToolTip(Me.UpdateBgsData, "Update Sepps Soft Data" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Only available when Influence Total is 100%")
         Me.UpdateBgsData.UseVisualStyleBackColor = True
         '
         'SelectedSystem
@@ -193,7 +193,7 @@ Partial Class RockRatsClient
         Me.ViewWebTracker.Size = New System.Drawing.Size(94, 31)
         Me.ViewWebTracker.TabIndex = 45
         Me.ViewWebTracker.Text = "Web Tracker"
-        Me.ToolTip1.SetToolTip(Me.ViewWebTracker, "Update RockRats Soft Data" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Only available when Influence Total is 100%")
+        Me.ToolTip1.SetToolTip(Me.ViewWebTracker, "Update Sepps Soft Data" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Only available when Influence Total is 100%")
         Me.ViewWebTracker.UseVisualStyleBackColor = True
         '
         'LogOcrCheckbox
@@ -259,7 +259,7 @@ Partial Class RockRatsClient
         Me.RemoveButton.Size = New System.Drawing.Size(88, 54)
         Me.RemoveButton.TabIndex = 51
         Me.RemoveButton.Text = "Remove from Collection List"
-        Me.ToolTip1.SetToolTip(Me.RemoveButton, "Add the entered system name to the list of official Rock Rat Systems")
+        Me.ToolTip1.SetToolTip(Me.RemoveButton, "Add the entered system name to the list of official SEPP Systems")
         Me.RemoveButton.UseVisualStyleBackColor = True
         '
         'AddButton
@@ -270,7 +270,7 @@ Partial Class RockRatsClient
         Me.AddButton.Size = New System.Drawing.Size(107, 53)
         Me.AddButton.TabIndex = 50
         Me.AddButton.Text = "Add To Collection List"
-        Me.ToolTip1.SetToolTip(Me.AddButton, "Add the entered system name to the list of official Rock Rat Systems")
+        Me.ToolTip1.SetToolTip(Me.AddButton, "Add the entered system name to the list of official SEPP Systems")
         Me.AddButton.UseVisualStyleBackColor = True
         '
         'Label7
@@ -490,6 +490,26 @@ Partial Class RockRatsClient
         Me.SoftDataTab.Text = "OCR"
         Me.SoftDataTab.UseVisualStyleBackColor = True
         '
+        'ScanningPanel
+        '
+        Me.ScanningPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.ScanningPanel.Controls.Add(Me.Label5)
+        Me.ScanningPanel.Location = New System.Drawing.Point(190, 104)
+        Me.ScanningPanel.Name = "ScanningPanel"
+        Me.ScanningPanel.Size = New System.Drawing.Size(200, 100)
+        Me.ScanningPanel.TabIndex = 61
+        Me.ScanningPanel.Visible = False
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(59, 41)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(84, 16)
+        Me.Label5.TabIndex = 1
+        Me.Label5.Text = "Scanning..."
+        '
         'IgtLabel
         '
         Me.IgtLabel.AutoSize = True
@@ -535,6 +555,7 @@ Partial Class RockRatsClient
         Me.EntryDate.Name = "EntryDate"
         Me.EntryDate.Size = New System.Drawing.Size(69, 20)
         Me.EntryDate.TabIndex = 54
+        Me.EntryDate.Visible = False
         '
         'CollectionTimingLabel
         '
@@ -679,27 +700,7 @@ Partial Class RockRatsClient
         Me.ClockTimer.Enabled = True
         Me.ClockTimer.Interval = 5000
         '
-        'ScanningPanel
-        '
-        Me.ScanningPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.ScanningPanel.Controls.Add(Me.Label5)
-        Me.ScanningPanel.Location = New System.Drawing.Point(190, 104)
-        Me.ScanningPanel.Name = "ScanningPanel"
-        Me.ScanningPanel.Size = New System.Drawing.Size(200, 100)
-        Me.ScanningPanel.TabIndex = 61
-        Me.ScanningPanel.Visible = False
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(59, 41)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(84, 16)
-        Me.Label5.TabIndex = 1
-        Me.Label5.Text = "Scanning..."
-        '
-        'RockRatsClient
+        'SeppOcrClient
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -708,10 +709,10 @@ Partial Class RockRatsClient
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
-        Me.Name = "RockRatsClient"
+        Me.Name = "SeppOcrClient"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Rock Rats Client"
+        Me.Text = "SEPP OCR Client"
         CType(Me.EDCapture, System.ComponentModel.ISupportInitialize).EndInit()
         Me.LogTab.ResumeLayout(False)
         Me.SettingsTab.ResumeLayout(False)
@@ -723,10 +724,10 @@ Partial Class RockRatsClient
         Me.GroupBox1.PerformLayout()
         Me.SoftDataTab.ResumeLayout(False)
         Me.SoftDataTab.PerformLayout()
-        CType(Me.SoftDataGrid, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Tabs.ResumeLayout(False)
         Me.ScanningPanel.ResumeLayout(False)
         Me.ScanningPanel.PerformLayout()
+        CType(Me.SoftDataGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Tabs.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

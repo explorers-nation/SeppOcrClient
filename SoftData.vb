@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports System.Text
 
 Module SoftData
-    Private rockRatsOcr As Tesseract
+    Private seppsOcr As Tesseract
     Private selectedSystem As String = ""
     Private allStates As New Hashtable()
     Private exeDir As String = AppDomain.CurrentDomain.BaseDirectory
@@ -20,13 +20,13 @@ Module SoftData
             Try
                 OCRUpdating = True
                 UpdateFactionsData()
-                rockRatsOcr = New Tesseract() ' OcrEngineMode.TesseractCubeCombined
-                rockRatsOcr.SetVariable("tessedit_char_whitelist", "QWERTYUIOPASDFGHJKLZXCVBNM.0987654321%:")
-                rockRatsOcr.Init(exeDir + "\tessdata", "eng", OcrEngineMode.TesseractOnly)
-                rockRatsOcr.Recognize(New Image(Of [Structure].Gray, Byte)(bitmapImage))
+                seppsOcr = New Tesseract() ' OcrEngineMode.TesseractCubeCombined
+                seppsOcr.SetVariable("tessedit_char_whitelist", "QWERTYUIOPASDFGHJKLZXCVBNM.0987654321%:")
+                seppsOcr.Init(exeDir + "\tessdata", "eng", OcrEngineMode.TesseractOnly)
+                seppsOcr.Recognize(New Image(Of [Structure].Gray, Byte)(bitmapImage))
                 Dim elements() As String
                 Dim stringSeparators() As String = {vbCrLf}
-                elements = rockRatsOcr.GetText.Split(stringSeparators, StringSplitOptions.None)
+                elements = seppsOcr.GetText.Split(stringSeparators, StringSplitOptions.None)
                 Dim factionFirstLine As String = ""
                 Dim factionName As String = ""
                 Dim influence As String = ""
@@ -34,7 +34,7 @@ Module SoftData
                 For Each line As String In elements
                     If Trim(line) <> "" Then
                         ' Uncommit to see OCR text
-                        ' RockRatsClient.LogEverywhere(line)
+                        ' SeppOcrClient.LogEverywhere(line)
 
                         ' line = whitelistChars(line)
                         line = UCase(line)
@@ -83,7 +83,7 @@ Module SoftData
     End Sub
     Private Sub LogOcrLine(line As String)
         If Parameters.GetParameter("logOcrText") = "True" Then
-            RockRatsClient.LogOutput(line)
+            SeppOcrClient.LogOutput(line)
         End If
     End Sub
 
@@ -112,20 +112,20 @@ Module SoftData
     Public Sub UpdateDataGridRow(faction As Faction, Optional scrollToChanges As Boolean = False)
         Dim doInsert As Boolean = True
         Dim influenceDiff = CalcInfluenceDiff(faction.PrevInfluence.ToString, faction.Influence.ToString)
-        For Each row As DataGridViewRow In RockRatsClient.SoftDataGrid.Rows
+        For Each row As DataGridViewRow In SeppOcrClient.SoftDataGrid.Rows
             If Not row.IsNewRow Then
-                If row.Cells(RockRatsClient.ColumnTypes.Faction).Value IsNot Nothing Then
-                    If row.Cells(RockRatsClient.ColumnTypes.Faction).Value.ToString = faction.FactionName Then
-                        row.Cells(RockRatsClient.ColumnTypes.Influence).Value = faction.Influence
-                        row.Cells(RockRatsClient.ColumnTypes.State).Value = faction.State
-                        row.Cells(RockRatsClient.ColumnTypes.PrevInfluence).Value = faction.PrevInfluence
-                        row.Cells(RockRatsClient.ColumnTypes.InfluenceDiff).Value = influenceDiff
-                        row.Cells(RockRatsClient.ColumnTypes.PrevState).Value = faction.PrevState
-                        row.Cells(RockRatsClient.ColumnTypes.Found).Value = faction.Found
+                If row.Cells(SeppOcrClient.ColumnTypes.Faction).Value IsNot Nothing Then
+                    If row.Cells(SeppOcrClient.ColumnTypes.Faction).Value.ToString = faction.FactionName Then
+                        row.Cells(SeppOcrClient.ColumnTypes.Influence).Value = faction.Influence
+                        row.Cells(SeppOcrClient.ColumnTypes.State).Value = faction.State
+                        row.Cells(SeppOcrClient.ColumnTypes.PrevInfluence).Value = faction.PrevInfluence
+                        row.Cells(SeppOcrClient.ColumnTypes.InfluenceDiff).Value = influenceDiff
+                        row.Cells(SeppOcrClient.ColumnTypes.PrevState).Value = faction.PrevState
+                        row.Cells(SeppOcrClient.ColumnTypes.Found).Value = faction.Found
                         If scrollToChanges Then
                             Dim scrollIndex = row.Index - 6
                             If scrollIndex >= 0 Then
-                                RockRatsClient.SoftDataGrid.FirstDisplayedScrollingRowIndex = row.Index - 6
+                                SeppOcrClient.SoftDataGrid.FirstDisplayedScrollingRowIndex = row.Index - 6
                             End If
                         End If
                         doInsert = False
@@ -135,7 +135,7 @@ Module SoftData
             End If
         Next
         If doInsert Then
-            RockRatsClient.SoftDataGrid.Rows.Add(
+            SeppOcrClient.SoftDataGrid.Rows.Add(
                 faction.Found,
                 faction.FactionName,
                 faction.PrevInfluence,
@@ -168,12 +168,12 @@ Module SoftData
         If Ready And Not OCRUpdating Then
             UpdateFactionsData()
             Dim i As Decimal = 0
-            For Each row As DataGridViewRow In RockRatsClient.SoftDataGrid.Rows
+            For Each row As DataGridViewRow In SeppOcrClient.SoftDataGrid.Rows
                 If Not row.IsNewRow Then
                     If Not row.IsNewRow Then
                         Dim n As Decimal = 0
                         Try
-                            n = Decimal.Parse(row.Cells(RockRatsClient.ColumnTypes.Influence).Value.ToString)
+                            n = Decimal.Parse(row.Cells(SeppOcrClient.ColumnTypes.Influence).Value.ToString)
                         Catch ex As Exception
                             ' Don't care
                         End Try
@@ -183,36 +183,36 @@ Module SoftData
             Next
 
             influenceAccountedFor = i
-            RockRatsClient.InfTotalVal.Text = influenceAccountedFor.ToString
+            SeppOcrClient.InfTotalVal.Text = influenceAccountedFor.ToString
             If HasUserFinishedOCRing() Then
-                RockRatsClient.InfTotal.ForeColor = RockRatsClient.ColorSuccess
-                RockRatsClient.InfTotalVal.ForeColor = RockRatsClient.ColorSuccess
-                RockRatsClient.SoftDataGrid.Columns(RockRatsClient.ColumnTypes.InfluenceDiff).DefaultCellStyle.ForeColor = RockRatsClient.ColorSuccess
-                RockRatsClient.UpdateBgsData.ForeColor = Color.DarkBlue
+                SeppOcrClient.InfTotal.ForeColor = SeppOcrClient.ColorSuccess
+                SeppOcrClient.InfTotalVal.ForeColor = SeppOcrClient.ColorSuccess
+                SeppOcrClient.SoftDataGrid.Columns(SeppOcrClient.ColumnTypes.InfluenceDiff).DefaultCellStyle.ForeColor = SeppOcrClient.ColorSuccess
+                SeppOcrClient.UpdateBgsData.ForeColor = Color.DarkBlue
             Else
-                RockRatsClient.InfTotal.ForeColor = RockRatsClient.ColorAttention
-                RockRatsClient.InfTotalVal.ForeColor = RockRatsClient.ColorAttention
-                RockRatsClient.SoftDataGrid.Columns(RockRatsClient.ColumnTypes.InfluenceDiff).DefaultCellStyle.ForeColor = RockRatsClient.ColorAttention
-                RockRatsClient.UpdateBgsData.ForeColor = RockRatsClient.ColorAttention
+                SeppOcrClient.InfTotal.ForeColor = SeppOcrClient.ColorAttention
+                SeppOcrClient.InfTotalVal.ForeColor = SeppOcrClient.ColorAttention
+                SeppOcrClient.SoftDataGrid.Columns(SeppOcrClient.ColumnTypes.InfluenceDiff).DefaultCellStyle.ForeColor = SeppOcrClient.ColorAttention
+                SeppOcrClient.UpdateBgsData.ForeColor = SeppOcrClient.ColorAttention
             End If
 
             If factions IsNot Nothing AndAlso factions.Count > 0 Then
                 Dim faction = factions.First
                 If Not String.IsNullOrEmpty(faction.EntryDate) Then
-                    RockRatsClient.EnteredByLabel.Text = "Today's data: " & faction.Commander & " on " & faction.EntryDate
-                    RockRatsClient.EnteredByLabel.Show()
+                    SeppOcrClient.EnteredByLabel.Text = "Today's data: " & faction.Commander & " on " & faction.EntryDate
+                    SeppOcrClient.EnteredByLabel.Show()
                 Else
-                    RockRatsClient.EnteredByLabel.Hide()
+                    SeppOcrClient.EnteredByLabel.Hide()
                 End If
                 If Not String.IsNullOrEmpty(faction.PrevEntryDate) Then
-                    RockRatsClient.PrevEnteredByLabel.Text = "Prev data: " & faction.PrevCommander & " on " & faction.PrevEntryDate
-                    RockRatsClient.PrevEnteredByLabel.Show()
+                    SeppOcrClient.PrevEnteredByLabel.Text = "Prev data: " & faction.PrevCommander & " on " & faction.PrevEntryDate
+                    SeppOcrClient.PrevEnteredByLabel.Show()
                 Else
-                    RockRatsClient.PrevEnteredByLabel.Hide()
+                    SeppOcrClient.PrevEnteredByLabel.Hide()
                 End If
             Else
-                RockRatsClient.EnteredByLabel.Hide()
-                RockRatsClient.PrevEnteredByLabel.Hide()
+                SeppOcrClient.EnteredByLabel.Hide()
+                SeppOcrClient.PrevEnteredByLabel.Hide()
             End If
         End If
     End Sub
@@ -223,12 +223,12 @@ Module SoftData
 
     Friend Sub ProcessSystemChange(systemName As String)
         If systemName <> selectedSystem Then
-            RockRatsClient.SoftDataGrid.Enabled = False
+            SeppOcrClient.SoftDataGrid.Enabled = False
             ProcessOCRTextChg()
             SaveSystemFactions()
             LoadSystemFactions(systemName)
             selectedSystem = systemName
-            RockRatsClient.SoftDataGrid.Enabled = True
+            SeppOcrClient.SoftDataGrid.Enabled = True
             ProcessOCRTextChg()
         End If
     End Sub
@@ -338,7 +338,7 @@ Module SoftData
         End If
     End Sub
     Public Sub LoadSystemFactions(systemName As String)
-        RockRatsClient.SoftDataGrid.Rows.Clear()
+        SeppOcrClient.SoftDataGrid.Rows.Clear()
 
         If Not systemFactions.ContainsKey(systemName) Then
             systemFactions.Add(systemName, New List(Of Faction))
@@ -369,27 +369,27 @@ Module SoftData
 
     Public Function AddSystem(systemName As String) As String
         Dim cleanSystemName As String = SoftData.WhitelistChars(Trim(systemName))
-        RockRatsClient.SelectedSystem.Items.Add(cleanSystemName)
+        SeppOcrClient.SelectedSystem.Items.Add(cleanSystemName)
 
         Return cleanSystemName
     End Function
     Public Function RemoveSystem(systemName As String) As String
         Dim cleanSystemName As String = SoftData.WhitelistChars(Trim(systemName))
-        RockRatsClient.SelectedSystem.Items.Remove(cleanSystemName)
+        SeppOcrClient.SelectedSystem.Items.Remove(cleanSystemName)
 
         Return cleanSystemName
     End Function
 
     Public Sub UpdateFactionsData()
-        If Ready AndAlso RockRatsClient.SoftDataGrid.Visible AndAlso RockRatsClient.SoftDataGrid.Enabled Then
+        If Ready AndAlso SeppOcrClient.SoftDataGrid.Visible AndAlso SeppOcrClient.SoftDataGrid.Enabled Then
             If systemFactions IsNot Nothing Then
                 If Not systemFactions.ContainsKey(selectedSystem) Then
                     systemFactions.Add(selectedSystem, New List(Of Faction))
                 End If
                 Dim updatedFactions = systemFactions(selectedSystem)
-                For Each row As DataGridViewRow In RockRatsClient.SoftDataGrid.Rows
+                For Each row As DataGridViewRow In SeppOcrClient.SoftDataGrid.Rows
                     If updatedFactions IsNot Nothing And Not row.IsNewRow Then
-                        Dim gridFaction As String = Trim(UCase(WhitelistChars(row.Cells(RockRatsClient.ColumnTypes.Faction).Value.ToString)))
+                        Dim gridFaction As String = Trim(UCase(WhitelistChars(row.Cells(SeppOcrClient.ColumnTypes.Faction).Value.ToString)))
                         If Not String.IsNullOrEmpty(gridFaction) Then
                             If factions.FirstOrDefault(Function(f) f.FactionName.Equals(gridFaction)) Is Nothing Then
                                 Dim faction As New Faction() With {
@@ -400,18 +400,18 @@ Module SoftData
                         End If
                     End If
                 Next
-                For Each row As DataGridViewRow In RockRatsClient.SoftDataGrid.Rows
+                For Each row As DataGridViewRow In SeppOcrClient.SoftDataGrid.Rows
                     If Not row.IsNewRow Then
-                        Dim gridFaction As String = Trim(UCase(WhitelistChars(row.Cells(RockRatsClient.ColumnTypes.Faction).Value.ToString)))
+                        Dim gridFaction As String = Trim(UCase(WhitelistChars(row.Cells(SeppOcrClient.ColumnTypes.Faction).Value.ToString)))
                         If Not String.IsNullOrEmpty(gridFaction) Then
                             Dim faction = updatedFactions.First(Function(f) f.FactionName.Equals(gridFaction))
                             Try
-                                faction.Influence = Decimal.Parse(row.Cells(RockRatsClient.ColumnTypes.Influence).Value.ToString)
+                                faction.Influence = Decimal.Parse(row.Cells(SeppOcrClient.ColumnTypes.Influence).Value.ToString)
                             Catch ex As Exception
                             End Try
-                            faction.State = SafeString(row.Cells(RockRatsClient.ColumnTypes.State).Value)
+                            faction.State = SafeString(row.Cells(SeppOcrClient.ColumnTypes.State).Value)
                             Try
-                                faction.Found = CBool(row.Cells(RockRatsClient.ColumnTypes.Found).Value)
+                                faction.Found = CBool(row.Cells(SeppOcrClient.ColumnTypes.Found).Value)
                             Catch ex As Exception
                             End Try
                         End If
@@ -422,7 +422,7 @@ Module SoftData
     End Sub
     Public Sub SendFactionsData()
         Dim factionsSent = 0
-        Dim entryDate = RockRatsClient.EntryDate.Text
+        Dim entryDate = SeppOcrClient.EntryDate.Text
 
         For Each faction In factions
             Try
@@ -435,27 +435,27 @@ Module SoftData
                     End If
 
                     If faction.Influence > 0 Or faction.PrevInfluence > 0 Then
-                        faction.Commander = RockRatsClient.CommanderName.Text
+                        faction.Commander = SeppOcrClient.CommanderName.Text
                         faction.EntryDate = entryDate
-                        faction.System = RockRatsClient.SelectedSystem.SelectedItem.ToString
+                        faction.System = SeppOcrClient.SelectedSystem.SelectedItem.ToString
 
                         Dim cwaitForCompletion As Boolean = Comms.SendUpdate(
                             faction.System & ":" &
                             faction.FactionName.ToString.ToUpper & ":" &
                             faction.State.ToString & ":" &
                             faction.Influence.ToString & ":OCR v" &
-                            RockRatsClient.getVersion() & ":" &
+                            SeppOcrClient.getVersion() & ":" &
                             faction.EntryDate)
                         factionsSent += 1
                     Else
-                        RockRatsClient.LogEverywhere("Skipping " & faction.FactionName & " because the infuence is zero")
+                        SeppOcrClient.LogEverywhere("Skipping " & faction.FactionName & " because the infuence is zero")
                     End If
                 End If
             Catch ex As Exception
-                RockRatsClient.LogEverywhere("Unable to send one of the rows")
+                SeppOcrClient.LogEverywhere("Unable to send one of the rows")
             End Try
         Next
-        RockRatsClient.LogOutput("Updated " & factionsSent & "/" & factions.Count & " Factions in " & RockRatsClient.SelectedSystem.SelectedItem.ToString)
+        SeppOcrClient.LogOutput("Updated " & factionsSent & "/" & factions.Count & " Factions in " & SeppOcrClient.SelectedSystem.SelectedItem.ToString)
 
     End Sub
 
@@ -555,7 +555,7 @@ Module SoftData
         Return New String(chars)
     End Function
     Public Sub UpdateCurrentFactionData(PrevEntryDate As String)
-        For Each systemName In RockRatsClient.SelectedSystem.Items
+        For Each systemName In SeppOcrClient.SelectedSystem.Items
             If systemFactions.ContainsKey(systemName.ToString) Then
                 For Each faction In systemFactions(systemName.ToString)
                     If PrevEntryDate = faction.PrevEntryDate Then
@@ -564,7 +564,7 @@ Module SoftData
                         faction.Influence = 0
                         faction.State = ""
                     End If
-                    If RockRatsClient.EntryDate.Text = faction.PrevEntryDate Then
+                    If SeppOcrClient.EntryDate.Text = faction.PrevEntryDate Then
                         faction.EntryDate = faction.PrevEntryDate
                         faction.Commander = faction.PrevCommander
                         faction.Influence = faction.PrevInfluence
@@ -579,13 +579,13 @@ Module SoftData
         ProcessOCRTextChg()
     End Sub
     Public Sub AlreadyProcessedCheck()
-        If selectedSystem = "CHERTAN" Then
+        If selectedSystem = "ELEU" Then
             Try
                 If factions.FirstOrDefault(Function(f) _
-                                               String.IsNullOrEmpty(
+                                               Not String.IsNullOrEmpty(
                                                     CalcInfluenceDiff(f.PrevInfluence.ToString(), f.Influence.ToString()))
-                                               ) IsNot Nothing Then
-                    MessageBox.Show("We're noticing that that the influence has changed in Chertan since the BGS update. It's likely that the Tick hasn't happened yet today. It's time does vary.",
+                                               ) Is Nothing Then
+                    MessageBox.Show("We're noticing that that the influence has changed in Eleu since the BGS update. It's likely that the Tick hasn't happened yet today. It's time does vary.",
                                     "Hmm...", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 End If
             Catch ex As Exception

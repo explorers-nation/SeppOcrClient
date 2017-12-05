@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5791F83B-047E-46BE-A72A-1CBAB701B5A2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>RockRatsClient.My.MyApplication</StartupObject>
-    <RootNamespace>RockRatsClient</RootNamespace>
-    <AssemblyName>RockRatsClient</AssemblyName>
+    <StartupObject>SeppOcrClient.My.MyApplication</StartupObject>
+    <RootNamespace>SeppOcrClient</RootNamespace>
+    <AssemblyName>SeppOcrClient</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -17,7 +17,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>C:\Users\Greg Malcolm\releases\RockRatsClient\</PublishUrl>
+    <PublishUrl>C:\Users\Greg Malcolm\releases\SeppOcrClient\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -27,11 +27,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ProductName>RockRats Client</ProductName>
-    <PublisherName>RockRats Tools</PublisherName>
+    <ProductName>Sepps Client</ProductName>
+    <PublisherName>Sepps Tools</PublisherName>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.5.0.%2a</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.5.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -43,7 +43,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>RockRatsClient.xml</DocumentationFile>
+    <DocumentationFile>SeppOcrClient.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <Prefer32Bit>true</Prefer32Bit>
@@ -56,7 +56,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>RockRatsClient.xml</DocumentationFile>
+    <DocumentationFile>SeppOcrClient.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -82,7 +82,7 @@
     <ManifestCertificateThumbprint>1D330FD255ABD3EE74A8E9E8FB23686E75C866CE</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>RockRatsClient_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>SeppOcrClient_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -238,13 +238,13 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Faction.vb" />
-    <Compile Include="RockRatsClient.Designer.vb">
-      <DependentUpon>RockRatsClient.vb</DependentUpon>
+    <Compile Include="SeppOcrClient.Designer.vb">
+      <DependentUpon>SeppOcrClient.vb</DependentUpon>
     </Compile>
-    <Compile Include="RockRatsClient.vb">
+    <Compile Include="SeppOcrClient.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RockRatsSystem.vb" />
+    <Compile Include="SeppSystem.vb" />
     <Compile Include="ViewImage.Designer.vb">
       <DependentUpon>ViewImage.vb</DependentUpon>
     </Compile>
@@ -280,8 +280,8 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RockRatsClient.resx">
-      <DependentUpon>RockRatsClient.vb</DependentUpon>
+    <EmbeddedResource Include="SeppOcrClient.resx">
+      <DependentUpon>SeppOcrClient.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewImage.resx">
       <DependentUpon>ViewImage.vb</DependentUpon>
@@ -371,6 +371,7 @@
     </None>
     <Content Include="AppSettingsSecrets.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="AppSettingsSecrets.config.example" />
     <None Include="My Project\app.manifest" />

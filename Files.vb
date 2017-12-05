@@ -21,7 +21,7 @@ Module Files
             If tmpJournal <> currentJournal Then
                 currentJournal = tmpJournal
                 lastMaxOffset = 0
-                RockRatsClient.LogOutput("Tailing: " + fileName)
+                SeppOcrClient.LogOutput("Tailing: " + fileName)
             End If
         Catch ex As Exception
             Return False
@@ -96,7 +96,7 @@ Module Files
         ' # 3 : Docked
         ' # 4 : ShipyardSwap
         ' # 5 : ShipyardNew
-        ' # 6 : SendText (Also Activity Point of Interest - Called from RockRats client)
+        ' # 6 : SendText (Also Activity Point of Interest - Called from Sepps client)
         ' # 7 : ReceiveText
         ' # 8 : Promotion
         '
@@ -156,9 +156,9 @@ Module Files
             For Each s As String In elements
                 If InStr(s, "|Commander|:") > 0 And uSubType = "2" Then
                     Dim commanderName As String = Trim(Replace(Mid(s, 14), "|", ""))
-                    RockRatsClient.CommanderName.Text = commanderName
+                    SeppOcrClient.CommanderName.Text = commanderName
                     DataCache.SetDataCache("Store", "LastCommander", commanderName)
-                    RockRatsClient.LogOutput("Updated commander to " + commanderName)
+                    SeppOcrClient.LogOutput("Updated commander to " + commanderName)
                 End If
             Next
             Return True
@@ -169,11 +169,11 @@ Module Files
     End Function
 
 
-    Private Function DistFromChertan(x As Integer, y As Integer, z As Integer) As Integer
-        Dim chertanX As Integer = 58  '  58.34375
-        Dim chertanY As Integer = 150 ' 149.5625
-        Dim chertanZ As Integer = -38 ' -38.34375
-        Dim dist As Integer = CInt(Math.Round(Math.Sqrt(Math.Pow((chertanX - x), 2) + Math.Pow((chertanY - y), 2) + Math.Pow((chertanZ - z), 2))))
+    Private Function DistFromEleu(x As Integer, y As Integer, z As Integer) As Integer
+        Dim eleuX As Integer = 29 ' -29.65625
+        Dim eleuY As Integer = 32 ' 32.6875
+        Dim eleuZ As Integer = 104 ' 104.84375
+        Dim dist As Integer = CInt(Math.Round(Math.Sqrt(Math.Pow((eleuX - x), 2) + Math.Pow((eleuY - y), 2) + Math.Pow((eleuZ - z), 2))))
         Return dist
     End Function
 

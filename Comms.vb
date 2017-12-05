@@ -10,10 +10,10 @@ Public Enum Transmission
     Authenticated = 1
     UpdateNotRequired = 2
     SystemUpdated = 3
-    RockRatSystems = 4
+    SeppSystems = 4
     StationUpdated = 5
     ActivityRecorded = 6
-    RockRatsSystemFaction = 7
+    SeppsSystemFaction = 7
     SoftDataUpdated = 8
     UnableToAuthenticate = 9
 End Enum
@@ -43,10 +43,10 @@ Module Comms
     ' TODO: Move away from the old TCP base logic
     Friend Function SendUpdate(softData As String) As Boolean
         Try
-            sendSoftDataQueue.Enqueue(Transmission.RockRatsSystemFaction & ":" & softData)
+            sendSoftDataQueue.Enqueue(Transmission.SeppsSystemFaction & ":" & softData)
             Return True
         Catch ex As Exception
-            RockRatsClient.LogOutput("Update failed: " & ex.Message)
+            SeppOcrClient.LogOutput("Update failed: " & ex.Message)
             Return False
         End Try
     End Function
@@ -56,14 +56,14 @@ Module Comms
             Try
                 Connect()
             Catch ex As Exception
-                RockRatsClient.LogOutput("Connect failed: " & ex.Message)
+                SeppOcrClient.LogOutput("Connect failed: " & ex.Message)
             End Try
         ElseIf isReceivingData Then
             isReceivingData = False
             Try
                 Await ReceiveData()
             Catch ex As Exception
-                RockRatsClient.LogEverywhere("Receive Data failed: " & ex.Message)
+                SeppOcrClient.LogEverywhere("Receive Data failed: " & ex.Message)
             End Try
         Else
             If authenticated Then
@@ -87,7 +87,7 @@ Module Comms
                         Await SendDataUpdate(sendData)
                     End If
                 Catch ex As Exception
-                    RockRatsClient.LogOutput("SendData failed: " & ex.Message)
+                    SeppOcrClient.LogOutput("SendData failed: " & ex.Message)
                 End Try
             End If
         End If
@@ -95,19 +95,19 @@ Module Comms
 
     Private Async Function SendDataUpdate(data As String) As Task
         ' 
-        If data(0) = CStr(Transmission.RockRatsSystemFaction) Then
+        If data(0) = CStr(Transmission.SeppsSystemFaction) Then
             Await SendFactionItemToAws(data)
         End If
         '.AppSettings["awsAccessKeyId"]
     End Function
 
     Private Async Function SendFactionItemToAws(data As String) As Task
-        RockRatsClient.LogOutput("Transmitting Report to AWS:   " & data)
+        SeppOcrClient.LogOutput("Transmitting Report to AWS:   " & data)
 
         Dim items = Split(data, ":")
 
         If items.Length < 6 Then
-            RockRatsClient.LogOutput("Error: bad packet")
+            SeppOcrClient.LogOutput("Error: bad packet")
 
             Throw New System.Exception("Bad packet")
         End If
@@ -118,7 +118,7 @@ Module Comms
         Dim influence = Trim(items(4))
         Dim updateType = Trim(items(5))
         Dim entryDate = Trim(items(6))
-        Dim commander = RockRatsClient.CommanderName.Text
+        Dim commander = SeppOcrClient.CommanderName.Text
 
         Dim id = "" & system & "-" & faction & "-" & entryDate
 
@@ -126,7 +126,7 @@ Module Comms
         String.IsNullOrWhiteSpace(faction) Or
         String.IsNullOrWhiteSpace(entryDate) Or
         String.IsNullOrWhiteSpace(influence)) Then
-            RockRatsClient.LogOutput("Error: data missing")
+            SeppOcrClient.LogOutput("Error: data missing")
 
             Throw New System.Exception("Data missing")
         End If
@@ -166,29 +166,29 @@ Module Comms
 
         Try
             Dim response = Await awsClient.PutItemAsync(
-                tableName:="rock-rat-factions",
+                tableName:="sepp-factions",
                 item:=attributes)
 
             If response.HttpStatusCode >= 300 Then
-                RockRatsClient.LogEverywhere("FAILED! Couldn't send '" & system & " - " & faction & "' data")
-                RockRatsClient.LogOutput("FAILED! (HTTP CODE = " & response.HttpStatusCode & ")")
+                SeppOcrClient.LogEverywhere("FAILED! Couldn't send '" & system & " - " & faction & "' data")
+                SeppOcrClient.LogOutput("FAILED! (HTTP CODE = " & response.HttpStatusCode & ")")
             Else
-                RockRatsClient.LogEverywhere("SUCCESS! Sent '" & system & " - " & faction & "' data")
-                RockRatsClient.LogOutput("(HTTP CODE = " & response.HttpStatusCode & ")")
+                SeppOcrClient.LogEverywhere("SUCCESS! Sent '" & system & " - " & faction & "' data")
+                SeppOcrClient.LogOutput("(HTTP CODE = " & response.HttpStatusCode & ")")
             End If
         Catch ex As Exception
-            RockRatsClient.LogEverywhere("FAILED! Couldn't send '" & system & " - " & faction & "' data")
-            RockRatsClient.LogOutput("Error: " & ex.Message)
+            SeppOcrClient.LogEverywhere("FAILED! Couldn't send '" & system & " - " & faction & "' data")
+            SeppOcrClient.LogOutput("Error: " & ex.Message)
         End Try
 
     End Function
     Private Async Function ReadSystemsFromAws() As Task
         Dim request = New ScanRequest() With {
-            .TableName = "rock-rat-systems"
+            .TableName = "sepp-systems"
         }
         Dim response = Await awsClient.ScanAsync(request)
 
-        RockRatsClient.SelectedSystem.Items.Clear()
+        SeppOcrClient.SelectedSystem.Items.Clear()
         For Each sys In response.Items.OrderBy(Function(system) system("datetime").S)
             SoftData.AddSystem(sys("system").S)
         Next
@@ -197,8 +197,7 @@ Module Comms
     Private Async Function ReadFactionsFromAws() As Task
         Dim lastWeek = String.Format("{0:yyyy-MM-dd}", Date.UtcNow - New TimeSpan(24 * 7, 0, 0))
         Dim request = New ScanRequest() With {
-            .TableName = "rock-rat-factions",
-            .IndexName = "date-index",
+            .TableName = "sepp-factions",
             .FilterExpression = "#entrydate >= :lastweek",
             .ExpressionAttributeNames = New Dictionary(Of String, String)() From {
                 {"#entrydate", "date"}
@@ -208,16 +207,16 @@ Module Comms
             },
             .Limit = 5000
         }
-        RockRatsClient.LogEverywhere("Requesting factions from AWS. At the moment this sometimes takes a while... :/")
+        SeppOcrClient.LogEverywhere("Requesting factions from AWS. At the moment this sometimes takes a while... :/")
         Dim response = Await awsClient.ScanAsync(request)
 
-        For Each systemName As String In RockRatsClient.SelectedSystem.Items
+        For Each systemName As String In SeppOcrClient.SelectedSystem.Items
             ReadFactionFromResults(response.Items, systemName)
         Next
     End Function
     Private Sub ReadFactionFromResults(factionsData As List(Of Dictionary(Of String, AttributeValue)), systemName As String)
         Dim systemFactions = factionsData.Where(Function(faction) faction("system").S.Equals(systemName))
-        RockRatsClient.LogOutput("Downloading factions from " & systemName)
+        SeppOcrClient.LogOutput("Downloading factions from " & systemName)
 
         If systemFactions.Count > 0 Then
             Dim lastEntry = systemFactions _
@@ -235,10 +234,10 @@ Module Comms
                     .PrevCommander = If(faction.ContainsKey("commander"), faction("commander").S, Nothing),
                     .PrevInfluence = If(faction.ContainsKey("influence"), Decimal.Parse(faction("influence").N), Nothing),
                     .PrevState = If(faction.ContainsKey("state"), faction("state").S, Nothing),
-                    .EntryDate = If(.PrevEntryDate = RockRatsClient.EntryDate.Text, .PrevEntryDate, Nothing),
-                    .Influence = If(.PrevEntryDate = RockRatsClient.EntryDate.Text, .PrevInfluence, Nothing),
-                    .State = If(.PrevEntryDate = RockRatsClient.EntryDate.Text, .PrevState, Nothing),
-                    .Commander = If(.PrevEntryDate = RockRatsClient.EntryDate.Text, .Commander, Nothing),
+                    .EntryDate = If(.PrevEntryDate = SeppOcrClient.EntryDate.Text, .PrevEntryDate, Nothing),
+                    .Influence = If(.PrevEntryDate = SeppOcrClient.EntryDate.Text, .PrevInfluence, Nothing),
+                    .State = If(.PrevEntryDate = SeppOcrClient.EntryDate.Text, .PrevState, Nothing),
+                    .Commander = If(.PrevEntryDate = SeppOcrClient.EntryDate.Text, .Commander, Nothing),
                     .Downloaded = True
                 }) _
                 .ToList()
@@ -247,11 +246,11 @@ Module Comms
             End If
     End Sub
     Private Async Function AddFactionNameToAws(systemName As String) As Task
-        RockRatsClient.LogOutput("Transmitting Add System Name ('" + systemName + "') to AWS: ")
+        SeppOcrClient.LogOutput("Transmitting Add System Name ('" + systemName + "') to AWS: ")
 
         Dim utc = DateTime.UtcNow
         Dim entryDateTime = String.Format("{0:yyyy-MM-dd hh:mm:ss}", utc)
-        Dim commander = RockRatsClient.CommanderName.Text
+        Dim commander = SeppOcrClient.CommanderName.Text
 
         Try
             Dim attributes = New Dictionary(Of String, AttributeValue)() From {
@@ -270,27 +269,27 @@ Module Comms
             End If
 
             Dim response = Await awsClient.PutItemAsync(
-                tableName:="rock-rat-systems",
+                tableName:="sepp-systems",
                 item:=attributes)
 
             If response.HttpStatusCode >= 300 Then
-                RockRatsClient.LogEverywhere("FAILED! Couldn't add the new System Name to AWS")
-                RockRatsClient.LogOutput("FAILED! (HTTP CODE = " & response.HttpStatusCode & ")")
+                SeppOcrClient.LogEverywhere("FAILED! Couldn't add the new System Name to AWS")
+                SeppOcrClient.LogOutput("FAILED! (HTTP CODE = " & response.HttpStatusCode & ")")
             Else
-                RockRatsClient.LogEverywhere("SUCCESS! Added the new System Name to AWS")
-                RockRatsClient.LogOutput("(HTTP CODE = " & response.HttpStatusCode & ")")
+                SeppOcrClient.LogEverywhere("SUCCESS! Added the new System Name to AWS")
+                SeppOcrClient.LogOutput("(HTTP CODE = " & response.HttpStatusCode & ")")
             End If
         Catch ex As Exception
-            RockRatsClient.LogEverywhere("FAILED! Couldn't add the new System Name to AWS")
-            RockRatsClient.LogOutput("Error: " & ex.Message)
+            SeppOcrClient.LogEverywhere("FAILED! Couldn't add the new System Name to AWS")
+            SeppOcrClient.LogOutput("Error: " & ex.Message)
         End Try
     End Function
     Private Async Function RemoveFactionNameFromAws(systemName As String) As Task
-        RockRatsClient.LogOutput("Transmitting Add System Name ('" + systemName + "') to AWS: ")
+        SeppOcrClient.LogOutput("Transmitting Add System Name ('" + systemName + "') to AWS: ")
 
         Dim utc = DateTime.UtcNow
         Dim entryDateTime = String.Format("{0:yyyy-MM-dd hh:mm:ss}", utc)
-        Dim commander = RockRatsClient.CommanderName.Text
+        Dim commander = SeppOcrClient.CommanderName.Text
 
         Try
             Dim attributes = New Dictionary(Of String, AttributeValue)() From {
@@ -300,19 +299,19 @@ Module Comms
             }
 
             Dim response = Await awsClient.DeleteItemAsync(
-                tableName:="rock-rat-systems",
+                tableName:="sepp-systems",
                 key:=attributes)
 
             If response.HttpStatusCode >= 300 Then
-                RockRatsClient.LogEverywhere("FAILED! Couldn't remove the System Name from AWS")
-                RockRatsClient.LogOutput("FAILED! (HTTP CODE = " & response.HttpStatusCode & ")")
+                SeppOcrClient.LogEverywhere("FAILED! Couldn't remove the System Name from AWS")
+                SeppOcrClient.LogOutput("FAILED! (HTTP CODE = " & response.HttpStatusCode & ")")
             Else
-                RockRatsClient.LogEverywhere("SUCCESS! Removed the System Name from AWS")
-                RockRatsClient.LogOutput("(HTTP CODE = " & response.HttpStatusCode & ")")
+                SeppOcrClient.LogEverywhere("SUCCESS! Removed the System Name from AWS")
+                SeppOcrClient.LogOutput("(HTTP CODE = " & response.HttpStatusCode & ")")
             End If
         Catch ex As Exception
-            RockRatsClient.LogEverywhere("FAILED! Couldn't remove the System Name from AWS")
-            RockRatsClient.LogOutput("Error: " & ex.Message)
+            SeppOcrClient.LogEverywhere("FAILED! Couldn't remove the System Name from AWS")
+            SeppOcrClient.LogOutput("Error: " & ex.Message)
         End Try
     End Function
 
@@ -327,11 +326,11 @@ Module Comms
         If (Not dataIsLoaded) Then
             Files.IdLastJournal()
             Files.TailJournal()
-            RockRatsClient.LogEverywhere("Downloading Systems...")
+            SeppOcrClient.LogEverywhere("Downloading Systems...")
             Await ReadSystemsFromAws()
             Await ReadFactionsFromAws()
-            RockRatsClient.LogEverywhere("Systems are ready!")
-            RockRatsClient.ShowBgsTools()
+            SeppOcrClient.LogEverywhere("Systems are ready!")
+            SeppOcrClient.ShowBgsTools()
             dataIsLoaded = True
         End If
     End Function
@@ -351,10 +350,10 @@ Module Comms
         responceCodes.Add("1", "Authenticated")
         responceCodes.Add("2", "Update not required")
         responceCodes.Add("3", "System Updated")
-        responceCodes.Add("4", "RockRats Systems")
+        responceCodes.Add("4", "Sepps Systems")
         responceCodes.Add("5", "Station Updated")
         responceCodes.Add("6", "Activity Recorded")
-        responceCodes.Add("7", "RockRats System Faction")
+        responceCodes.Add("7", "Sepps System Faction")
         responceCodes.Add("8", "Soft Data Updated")
         responceCodes.Add("-", "Unknown command")
     End Sub

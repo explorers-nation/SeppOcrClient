@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("RockRats Client")>
+<Assembly: AssemblyTitle("Sepps Client")>
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("RockRats Client")>
-<Assembly: AssemblyCopyright("Copyright ©  RockRats Tools 2017")>
+<Assembly: AssemblyProduct("Sepps Client")>
+<Assembly: AssemblyCopyright("Copyright ©  Sepps Tools 2017")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -32,4 +32,4 @@ Imports System.Runtime.InteropServices
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
 <Assembly: AssemblyVersion("1.5.*")>
-<Assembly: AssemblyFileVersion("1.5.0.1")>
+<Assembly: AssemblyFileVersion("1.5.1.1")>

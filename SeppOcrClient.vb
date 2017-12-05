@@ -2,7 +2,7 @@
 Imports System.Deployment.Application
 Imports System.Globalization
 
-Public Class RockRatsClient
+Public Class SeppOcrClient
     Public Enum ColumnTypes
         Found = 0
         Faction = 1
@@ -18,7 +18,7 @@ Public Class RockRatsClient
         PostTick = 1
     End Enum
 
-    Private AppDataDir As String = Environment.GetEnvironmentVariable("USERPROFILE") + "\AppData\Local\RockRatsClient"
+    Private AppDataDir As String = Environment.GetEnvironmentVariable("USERPROFILE") + "\AppData\Local\SeppOcrClient"
     Private clientVersion As String = Application.ProductVersion
     Private noLogDups As String = ""
 
@@ -27,7 +27,7 @@ Public Class RockRatsClient
     Public Property ColorAttention As Color = ColorTranslator.FromHtml("#C22")
     Public Property ColorSuccess As Color = Color.DarkGreen
 
-    Private Sub RockRatsClient_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub SeppOcrClient_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If Not Directory.Exists(AppDataDir) Then
             My.Computer.FileSystem.CreateDirectory(AppDataDir)
         End If
@@ -133,11 +133,11 @@ Public Class RockRatsClient
         Dim procBitmap As New Bitmap(CInt(screenshot.Width * resizeScale), CInt(screenshot.Height * resizeScale))
         Dim grBitmap As Graphics = Graphics.FromImage(procBitmap)
         grBitmap.DrawImage(screenshot, 0, 0, procBitmap.Width, procBitmap.Height)
-        Call Global.RockRatsClient.ProcEDScreen(procBitmap)
+        Call Global.SeppOcrClient.ProcEDScreen(procBitmap)
         EDCapture.Image = procBitmap
 
         EDCapture.Refresh()
-        Call Global.RockRatsClient.ProcessOCRTextChg()
+        Call Global.SeppOcrClient.ProcessOCRTextChg()
         If CInt(InfTotalVal.Text) > 98 And CInt(InfTotalVal.Text) < 102 Then
             SoftData.AlreadyProcessedCheck()
         End If
@@ -173,7 +173,7 @@ Public Class RockRatsClient
             ResetSystemNameBox(SelectedSystem.SelectedItem.ToString)
             My.Computer.Clipboard.SetText(SystemNameBox.Text)
             StatusLog("Copied '" & SelectedSystem.SelectedItem.ToString & "' to clipboard!")
-            Call Global.RockRatsClient.ProcessSystemChange(SelectedSystem.SelectedItem.ToString)
+            Call Global.SeppOcrClient.ProcessSystemChange(SelectedSystem.SelectedItem.ToString)
             SoftDataGrid.Select()
         End If
     End Sub
@@ -188,7 +188,7 @@ Public Class RockRatsClient
     End Sub
 
     Private Sub SoftDataGrid_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles SoftDataGrid.CellValueChanged
-        Call Global.RockRatsClient.ProcessOCRTextChg()
+        Call Global.SeppOcrClient.ProcessOCRTextChg()
     End Sub
 
     Private Sub onTop_CheckedChanged(sender As Object, e As EventArgs) Handles AlwaysOnTopCheckbox.CheckedChanged
@@ -208,7 +208,7 @@ Public Class RockRatsClient
     End Function
 
     Private Sub ViewWebTracker_Click(sender As Object, e As EventArgs) Handles ViewWebTracker.Click
-        Dim webAddress As String = "http://rock-rats-bgs-tracker.s3-website-us-east-1.amazonaws.com/"
+        Dim webAddress As String = "http://sepps-bgs-tracker.s3-website-us-east-1.amazonaws.com/"
         Process.Start(webAddress)
     End Sub
 
@@ -236,7 +236,7 @@ Public Class RockRatsClient
         If MessageBox.Show("Add " & systemName & " to the list of systems we're updating?",
                            "Orly?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
             If Await Comms.AddSystemToRoster(systemName) Then
-                StatusLog("Successfully added " & systemName & "to the Rock Rat known systems list!")
+                StatusLog("Successfully added " & systemName & "to the SEPP known systems list!")
                 SelectedSystem.SelectedIndex = SelectedSystem.Items.Count - 1
             Else
                 StatusLog("Failed to add the system, sorry!")
@@ -257,7 +257,7 @@ Public Class RockRatsClient
         If MessageBox.Show("So... you want to remove " & systemName & " from the list of systems we're updating?",
                            "Huh?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
             If Await Comms.RemoveSystemFromRoster(systemName) Then
-                StatusLog("Successfully removed " & systemName & "from the Rock Rat known systems list!")
+                StatusLog("Successfully removed " & systemName & "from the SEPP known systems list!")
             Else
                 StatusLog("Failed to remove the system, sorry!")
             End If
@@ -266,7 +266,11 @@ Public Class RockRatsClient
 
     Private Sub SoftDataGrid_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles SoftDataGrid.CellEndEdit
         Dim cell = SoftDataGrid(e.ColumnIndex, e.RowIndex)
-        Select Case e.ColumnIndex
+
+        PostChangeUpdate(cell)
+    End Sub
+    Private Sub PostChangeUpdate(cell As DataGridViewCell)
+        Select Case cell.ColumnIndex
             Case ColumnTypes.Faction
                 Try
                     Dim faction = cell.Value.ToString
@@ -281,8 +285,8 @@ Public Class RockRatsClient
                 End Try
 
                 Try
-                    Dim prevInfluenceCell = SoftDataGrid(ColumnTypes.PrevInfluence, e.RowIndex)
-                    Dim InfluenceDiffCell = SoftDataGrid(ColumnTypes.InfluenceDiff, e.RowIndex)
+                    Dim prevInfluenceCell = SoftDataGrid(ColumnTypes.PrevInfluence, cell.RowIndex)
+                    Dim InfluenceDiffCell = SoftDataGrid(ColumnTypes.InfluenceDiff, cell.RowIndex)
                     If prevInfluenceCell.Value IsNot Nothing AndAlso cell.Value IsNot Nothing Then
                         Dim diff = SoftData.CalcInfluenceDiff(prevInfluenceCell.Value.ToString, cell.Value.ToString)
                         InfluenceDiffCell.Value = diff
@@ -290,35 +294,46 @@ Public Class RockRatsClient
                 Catch ex As Exception
                 End Try
         End Select
+
     End Sub
 
     Private Sub SoftDataGrid_KeyPress(sender As Object, e As KeyPressEventArgs) Handles SoftDataGrid.KeyPress
         Dim cell = SoftDataGrid.CurrentCell
-        If e.KeyChar.Equals(vbBack) Then
-            cell.Value = Nothing
-            SoftDataGrid.NotifyCurrentCellDirty(True)
+        If Not cell.ReadOnly Then
+            If e.KeyChar.Equals(vbBack) Then
+                cell.Value = Nothing
+                SoftDataGrid.NotifyCurrentCellDirty(True)
+                PostChangeUpdate(cell)
+            End If
         End If
     End Sub
 
     Private Sub SoftDataGrid_KeyDown(sender As Object, e As KeyEventArgs) Handles SoftDataGrid.KeyDown
         Dim cell = SoftDataGrid.CurrentCell
-        If e.KeyCode.Equals(Keys.Delete) Then
-            cell.Value = Nothing
-        End If
 
         If e.KeyCode = Keys.C AndAlso e.Modifiers = Keys.Control Then
             My.Computer.Clipboard.SetText(cell.Value.ToString)
         End If
 
-        If e.KeyCode = Keys.V AndAlso e.Modifiers = Keys.Control Then
-            cell.Value = My.Computer.Clipboard.GetText()
-            SoftDataGrid.NotifyCurrentCellDirty(True)
-        End If
+        If Not cell.ReadOnly Then
+            If e.KeyCode.Equals(Keys.Delete) Then
+                cell.Value = Nothing
+                SoftDataGrid.NotifyCurrentCellDirty(True)
+                PostChangeUpdate(cell)
+            End If
 
-        If e.KeyCode = Keys.X AndAlso e.Modifiers = Keys.Control Then
-            My.Computer.Clipboard.SetText(cell.Value.ToString)
-            cell.Value = Nothing
-            SoftDataGrid.NotifyCurrentCellDirty(True)
+            If e.KeyCode = Keys.V AndAlso e.Modifiers = Keys.Control Then
+                cell.Value = My.Computer.Clipboard.GetText()
+                SoftDataGrid.NotifyCurrentCellDirty(True)
+                PostChangeUpdate(cell)
+            End If
+
+            If e.KeyCode = Keys.X AndAlso e.Modifiers = Keys.Control Then
+                My.Computer.Clipboard.SetText(cell.Value.ToString)
+                cell.Value = Nothing
+                SoftDataGrid.NotifyCurrentCellDirty(True)
+                PostChangeUpdate(cell)
+            End If
         End If
 
     End Sub
@@ -345,7 +360,10 @@ Public Class RockRatsClient
     End Sub
 
     Public Sub ShowBgsTools()
-        SelectedSystem.SelectedIndex = 0
+        If SelectedSystem.Items.Count > 0 Then
+            SelectedSystem.SelectedIndex = 0
+        End If
+
         SelectedSystem.Show()
         SoftDataGrid.Show()
         CollectionTimingLabel.Show()
@@ -407,7 +425,7 @@ Public Class RockRatsClient
         UpdateCollectionDate()
     End Sub
     Private Sub UpdateClock()
-        Clock.Text = Date.UtcNow.ToString("ddd yyyy-MM-dd hh:mm IGT")
+        Clock.Text = Date.UtcNow.ToString("ddd yyyy-MM-dd HH:mm IGT")
     End Sub
     Private Sub ClockTimer_Tick(sender As Object, e As EventArgs) Handles ClockTimer.Tick
         UpdateClock()

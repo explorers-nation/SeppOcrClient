@@ -56,7 +56,7 @@ Partial Class ViewImage
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ViewImage"
-        Me.Text = "RockRatsClient - View Image"
+        Me.Text = "SeppOcrClient - View Image"
         Me.Panel1.ResumeLayout(False)
         CType(Me.ImgBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)

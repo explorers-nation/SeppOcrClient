@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.RockRatsClient.My.MySettings
+        Friend ReadOnly Property Settings() As Global.SeppOcrClient.My.MySettings
             Get
-                Return Global.RockRatsClient.My.MySettings.Default
+                Return Global.SeppOcrClient.My.MySettings.Default
             End Get
         End Property
     End Module

@@ -1,7 +1,7 @@
-Rock Rat Client
-===============
+SEPP Client
+===========
 
-This is a blatant rip off of SEPPClient for use with Rock Rats faction in Elite Dangerous. Thanks to Hamouras for original code/
+BGS OCR Client. Uploads BGS data to SEPP Central
 
 AWS Configuration
 -----------------
@@ -31,10 +31,10 @@ https://sourceforge.net/projects/emgucv/files/emgucv/3.0.0/libemgucv-windows-uni
 
 2) Build the project
 
-3) Copy the bin/x64 (or bin/x86) dlls from emgu-cv to rock-rat-client Debug/Release x64 (or x86) folder.
+3) Copy the bin/x64 (or bin/x86) dlls from emgu-cv to sepp-client Debug/Release x64 (or x86) folder.
 
 For example, copy this:
 
-C:\Emgu\emgucv-windows-universal-cuda 3.0.0.2158\bin\x64\ to rock-rat-client\bin\Debug\x64
+C:\Emgu\emgucv-windows-universal-cuda 3.0.0.2158\bin\x64\ to SeppOcrClient\bin\Debug\x64
 
 4) Run the app. You should no longer get missing DLL errors when performing OCR.

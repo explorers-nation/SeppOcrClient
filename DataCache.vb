@@ -1,6 +1,6 @@
 ﻿Module DataCache
     Private dataCache As New Hashtable()
-    Private datFile As String = Environment.GetEnvironmentVariable("USERPROFILE") + "\AppData\Local\RockRatsClient\RockRatsClient.cache"
+    Private datFile As String = Environment.GetEnvironmentVariable("USERPROFILE") + "\AppData\Local\SeppOcrClient\SeppOcrClient.cache"
 
     Friend Function GetDataCache(pCat As String, cKey As String) As String
         Dim retValue As String = ""
