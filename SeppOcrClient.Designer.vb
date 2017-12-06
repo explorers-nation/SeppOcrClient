@@ -264,7 +264,6 @@ Partial Class SeppOcrClient
         '
         'AddButton
         '
-        Me.AddButton.Enabled = False
         Me.AddButton.Location = New System.Drawing.Point(236, 19)
         Me.AddButton.Name = "AddButton"
         Me.AddButton.Size = New System.Drawing.Size(107, 53)

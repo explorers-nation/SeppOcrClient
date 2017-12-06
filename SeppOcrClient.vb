@@ -208,7 +208,7 @@ Public Class SeppOcrClient
     End Function
 
     Private Sub ViewWebTracker_Click(sender As Object, e As EventArgs) Handles ViewWebTracker.Click
-        Dim webAddress As String = "http://sepps-bgs-tracker.s3-website-us-east-1.amazonaws.com/"
+        Dim webAddress As String = "http://sepp-bgs-tracker.s3-website-us-east-1.amazonaws.com/"
         Process.Start(webAddress)
     End Sub
 
@@ -228,7 +228,7 @@ Public Class SeppOcrClient
         RemoveButton.Enabled = True
     End Sub
 
-    Private Async Sub AddButton_Click(sender As Object, e As EventArgs)
+    Private Async Sub AddButton_Click(sender As Object, e As EventArgs) Handles AddButton.Click
         Dim systemName As String
         systemName = SystemNameBox.Text.ToUpper()
 
@@ -244,12 +244,7 @@ Public Class SeppOcrClient
         End If
     End Sub
 
-    Private Sub SystemNameBox_TextChanged(sender As Object, e As EventArgs)
-        AddButton.Enabled = True
-        RemoveButton.Enabled = False
-    End Sub
-
-    Private Async Sub RemoveButton_Click(sender As Object, e As EventArgs)
+    Private Async Sub RemoveButton_Click(sender As Object, e As EventArgs) Handles RemoveButton.Click
         Dim systemName As String
         systemName = SystemNameBox.Text.ToUpper()
 
@@ -429,5 +424,10 @@ Public Class SeppOcrClient
     End Sub
     Private Sub ClockTimer_Tick(sender As Object, e As EventArgs) Handles ClockTimer.Tick
         UpdateClock()
+    End Sub
+
+    Private Sub SystemNameBox_TextChanged(sender As Object, e As EventArgs) Handles SystemNameBox.TextChanged
+        AddButton.Enabled = Len(SystemNameBox.Text) > 0
+        RemoveButton.Enabled = Len(SystemNameBox.Text) = 0
     End Sub
 End Class

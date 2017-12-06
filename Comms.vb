@@ -198,6 +198,7 @@ Module Comms
         Dim lastWeek = String.Format("{0:yyyy-MM-dd}", Date.UtcNow - New TimeSpan(24 * 7, 0, 0))
         Dim request = New ScanRequest() With {
             .TableName = "sepp-factions",
+            .IndexName = "date-index",
             .FilterExpression = "#entrydate >= :lastweek",
             .ExpressionAttributeNames = New Dictionary(Of String, String)() From {
                 {"#entrydate", "date"}
@@ -237,13 +238,13 @@ Module Comms
                     .EntryDate = If(.PrevEntryDate = SeppOcrClient.EntryDate.Text, .PrevEntryDate, Nothing),
                     .Influence = If(.PrevEntryDate = SeppOcrClient.EntryDate.Text, .PrevInfluence, Nothing),
                     .State = If(.PrevEntryDate = SeppOcrClient.EntryDate.Text, .PrevState, Nothing),
-                    .Commander = If(.PrevEntryDate = SeppOcrClient.EntryDate.Text, .Commander, Nothing),
+                    .Commander = If(.PrevEntryDate = SeppOcrClient.EntryDate.Text, .PrevCommander, Nothing),
                     .Downloaded = True
                 }) _
                 .ToList()
 
             SoftData.AddFactions(systemName, factionsList)
-            End If
+        End If
     End Sub
     Private Async Function AddFactionNameToAws(systemName As String) As Task
         SeppOcrClient.LogOutput("Transmitting Add System Name ('" + systemName + "') to AWS: ")
