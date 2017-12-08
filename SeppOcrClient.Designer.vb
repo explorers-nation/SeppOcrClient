@@ -84,6 +84,15 @@ Partial Class SeppOcrClient
         Me.AlwaysOnTopCheckbox = New System.Windows.Forms.CheckBox()
         Me.Tabs = New System.Windows.Forms.TabControl()
         Me.ClockTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.GameScreenWidth = New System.Windows.Forms.TextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.GameScreenHeight = New System.Windows.Forms.TextBox()
+        Me.RecalcScreenResButton = New System.Windows.Forms.Button()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.TestOcrButton = New System.Windows.Forms.Button()
         CType(Me.EDCapture, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.LogTab.SuspendLayout()
         Me.SettingsTab.SuspendLayout()
@@ -112,7 +121,7 @@ Partial Class SeppOcrClient
         Me.BrowserForDir.Location = New System.Drawing.Point(402, 18)
         Me.BrowserForDir.Name = "BrowserForDir"
         Me.BrowserForDir.Size = New System.Drawing.Size(36, 24)
-        Me.BrowserForDir.TabIndex = 24
+        Me.BrowserForDir.TabIndex = 2
         Me.BrowserForDir.Text = "..."
         Me.ToolTip1.SetToolTip(Me.BrowserForDir, "Select the location of your ED Journal")
         Me.BrowserForDir.UseVisualStyleBackColor = True
@@ -125,7 +134,7 @@ Partial Class SeppOcrClient
         Me.JournalFolder.Multiline = True
         Me.JournalFolder.Name = "JournalFolder"
         Me.JournalFolder.Size = New System.Drawing.Size(321, 21)
-        Me.JournalFolder.TabIndex = 23
+        Me.JournalFolder.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.JournalFolder, "Set the location of your ED Journal")
         Me.JournalFolder.WordWrap = False
         '
@@ -200,10 +209,10 @@ Partial Class SeppOcrClient
         '
         Me.LogOcrCheckbox.AutoSize = True
         Me.LogOcrCheckbox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.LogOcrCheckbox.Location = New System.Drawing.Point(247, 39)
+        Me.LogOcrCheckbox.Location = New System.Drawing.Point(239, 39)
         Me.LogOcrCheckbox.Name = "LogOcrCheckbox"
         Me.LogOcrCheckbox.Size = New System.Drawing.Size(146, 17)
-        Me.LogOcrCheckbox.TabIndex = 51
+        Me.LogOcrCheckbox.TabIndex = 2
         Me.LogOcrCheckbox.Text = "Log OCR text translations"
         Me.ToolTip1.SetToolTip(Me.LogOcrCheckbox, "Covert the Image to Grey Scale prior to OCR processing" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "This can improve OCR accu" &
         "racy but at a minor delay")
@@ -211,20 +220,20 @@ Partial Class SeppOcrClient
         '
         'ScanMarginLeft
         '
-        Me.ScanMarginLeft.Location = New System.Drawing.Point(344, 11)
+        Me.ScanMarginLeft.Location = New System.Drawing.Point(344, 111)
         Me.ScanMarginLeft.Name = "ScanMarginLeft"
         Me.ScanMarginLeft.Size = New System.Drawing.Size(41, 20)
-        Me.ScanMarginLeft.TabIndex = 56
+        Me.ScanMarginLeft.TabIndex = 6
         Me.ToolTip1.SetToolTip(Me.ScanMarginLeft, "Set how much of the screen to look at when capturing text. This will stop other t" &
         "ext like this window contaminating the results")
         '
         'Label14
         '
         Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(210, 14)
+        Me.Label14.Location = New System.Drawing.Point(210, 114)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(131, 13)
-        Me.Label14.TabIndex = 57
+        Me.Label14.TabIndex = 9
         Me.Label14.Text = "Area of left screen to scan"
         Me.ToolTip1.SetToolTip(Me.Label14, "Set how much of the screen to look at when capturing text. This will stop other t" &
         "ext like this window contaminating the results")
@@ -246,7 +255,7 @@ Partial Class SeppOcrClient
         Me.Label1.Location = New System.Drawing.Point(5, 17)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(85, 13)
-        Me.Label1.TabIndex = 60
+        Me.Label1.TabIndex = 0
         Me.Label1.Text = "Last OCR Image" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.ToolTip1.SetToolTip(Me.Label1, "Set how much of the screen to look at when capturing text. This will stop other t" &
         "ext like this window contaminating the results")
@@ -257,7 +266,7 @@ Partial Class SeppOcrClient
         Me.RemoveButton.Location = New System.Drawing.Point(349, 18)
         Me.RemoveButton.Name = "RemoveButton"
         Me.RemoveButton.Size = New System.Drawing.Size(88, 54)
-        Me.RemoveButton.TabIndex = 51
+        Me.RemoveButton.TabIndex = 0
         Me.RemoveButton.Text = "Remove from Collection List"
         Me.ToolTip1.SetToolTip(Me.RemoveButton, "Add the entered system name to the list of official SEPP Systems")
         Me.RemoveButton.UseVisualStyleBackColor = True
@@ -267,7 +276,7 @@ Partial Class SeppOcrClient
         Me.AddButton.Location = New System.Drawing.Point(236, 19)
         Me.AddButton.Name = "AddButton"
         Me.AddButton.Size = New System.Drawing.Size(107, 53)
-        Me.AddButton.TabIndex = 50
+        Me.AddButton.TabIndex = 3
         Me.AddButton.Text = "Add To Collection List"
         Me.ToolTip1.SetToolTip(Me.AddButton, "Add the entered system name to the list of official SEPP Systems")
         Me.AddButton.UseVisualStyleBackColor = True
@@ -278,7 +287,7 @@ Partial Class SeppOcrClient
         Me.Label7.Location = New System.Drawing.Point(11, 21)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(75, 13)
-        Me.Label7.TabIndex = 63
+        Me.Label7.TabIndex = 0
         Me.Label7.Text = "System Name:"
         Me.ToolTip1.SetToolTip(Me.Label7, "Set how much of the screen to look at when capturing text. This will stop other t" &
         "ext like this window contaminating the results")
@@ -349,7 +358,7 @@ Partial Class SeppOcrClient
         Me.GroupBox3.Location = New System.Drawing.Point(418, 140)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(445, 164)
-        Me.GroupBox3.TabIndex = 62
+        Me.GroupBox3.TabIndex = 0
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "System Rota Management"
         '
@@ -358,7 +367,7 @@ Partial Class SeppOcrClient
         Me.SystemNameBox.Location = New System.Drawing.Point(92, 18)
         Me.SystemNameBox.Name = "SystemNameBox"
         Me.SystemNameBox.Size = New System.Drawing.Size(138, 20)
-        Me.SystemNameBox.TabIndex = 49
+        Me.SystemNameBox.TabIndex = 2
         '
         'GroupBox2
         '
@@ -372,7 +381,7 @@ Partial Class SeppOcrClient
         Me.GroupBox2.Location = New System.Drawing.Point(417, 3)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(444, 130)
-        Me.GroupBox2.TabIndex = 61
+        Me.GroupBox2.TabIndex = 2
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Journal Scraping"
         '
@@ -384,7 +393,7 @@ Partial Class SeppOcrClient
         Me.TickTimePicker.Name = "TickTimePicker"
         Me.TickTimePicker.ShowUpDown = True
         Me.TickTimePicker.Size = New System.Drawing.Size(68, 20)
-        Me.TickTimePicker.TabIndex = 35
+        Me.TickTimePicker.TabIndex = 0
         Me.TickTimePicker.Value = New Date(2000, 1, 1, 1, 23, 0, 0)
         '
         'Label4
@@ -394,7 +403,7 @@ Partial Class SeppOcrClient
         Me.Label4.Location = New System.Drawing.Point(10, 98)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(130, 13)
-        Me.Label4.TabIndex = 34
+        Me.Label4.TabIndex = 6
         Me.Label4.Text = "Estimated Tick Time (IGT)"
         '
         'Label2
@@ -404,7 +413,7 @@ Partial Class SeppOcrClient
         Me.Label2.Location = New System.Drawing.Point(49, 62)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(94, 13)
-        Me.Label2.TabIndex = 33
+        Me.Label2.TabIndex = 4
         Me.Label2.Text = "Commander Name"
         '
         'CommanderName
@@ -413,7 +422,7 @@ Partial Class SeppOcrClient
         Me.CommanderName.Location = New System.Drawing.Point(149, 57)
         Me.CommanderName.Name = "CommanderName"
         Me.CommanderName.Size = New System.Drawing.Size(250, 21)
-        Me.CommanderName.TabIndex = 32
+        Me.CommanderName.TabIndex = 5
         '
         'Label9
         '
@@ -422,11 +431,20 @@ Partial Class SeppOcrClient
         Me.Label9.Location = New System.Drawing.Point(10, 24)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(62, 13)
-        Me.Label9.TabIndex = 22
+        Me.Label9.TabIndex = 0
         Me.Label9.Text = "Logs Folder"
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.TestOcrButton)
+        Me.GroupBox1.Controls.Add(Me.Label12)
+        Me.GroupBox1.Controls.Add(Me.Label11)
+        Me.GroupBox1.Controls.Add(Me.Label10)
+        Me.GroupBox1.Controls.Add(Me.RecalcScreenResButton)
+        Me.GroupBox1.Controls.Add(Me.Label8)
+        Me.GroupBox1.Controls.Add(Me.GameScreenHeight)
+        Me.GroupBox1.Controls.Add(Me.Label6)
+        Me.GroupBox1.Controls.Add(Me.GameScreenWidth)
         Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Controls.Add(Me.Label17)
@@ -437,7 +455,7 @@ Partial Class SeppOcrClient
         Me.GroupBox1.Location = New System.Drawing.Point(3, 3)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(408, 296)
-        Me.GroupBox1.TabIndex = 59
+        Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "OCR Calibration"
         '
@@ -447,13 +465,13 @@ Partial Class SeppOcrClient
         Me.Label3.Location = New System.Drawing.Point(6, 278)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(336, 13)
-        Me.Label3.TabIndex = 62
+        Me.Label3.TabIndex = 8
         Me.Label3.Text = "Use it to check the Factions text is the only part getting OCR scanned" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'Label17
         '
         Me.Label17.AutoSize = True
-        Me.Label17.Location = New System.Drawing.Point(385, 14)
+        Me.Label17.Location = New System.Drawing.Point(385, 114)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(15, 13)
         Me.Label17.TabIndex = 59
@@ -699,6 +717,95 @@ Partial Class SeppOcrClient
         Me.ClockTimer.Enabled = True
         Me.ClockTimer.Interval = 5000
         '
+        'GameScreenWidth
+        '
+        Me.GameScreenWidth.Location = New System.Drawing.Point(314, 137)
+        Me.GameScreenWidth.Name = "GameScreenWidth"
+        Me.GameScreenWidth.Size = New System.Drawing.Size(71, 20)
+        Me.GameScreenWidth.TabIndex = 14
+        Me.ToolTip1.SetToolTip(Me.GameScreenWidth, "Set how much of the screen to look at when capturing text. This will stop other t" &
+        "ext like this window contaminating the results")
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(190, 140)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(115, 13)
+        Me.Label6.TabIndex = 11
+        Me.Label6.Text = "Override Screen Width"
+        Me.ToolTip1.SetToolTip(Me.Label6, "Set how much of the screen to look at when capturing text. This will stop other t" &
+        "ext like this window contaminating the results")
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(190, 166)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(118, 13)
+        Me.Label8.TabIndex = 1
+        Me.Label8.Text = "Override Screen Height"
+        Me.ToolTip1.SetToolTip(Me.Label8, "Set how much of the screen to look at when capturing text. This will stop other t" &
+        "ext like this window contaminating the results")
+        '
+        'GameScreenHeight
+        '
+        Me.GameScreenHeight.Location = New System.Drawing.Point(314, 163)
+        Me.GameScreenHeight.Name = "GameScreenHeight"
+        Me.GameScreenHeight.Size = New System.Drawing.Size(71, 20)
+        Me.GameScreenHeight.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.GameScreenHeight, "Set how much of the screen to look at when capturing text. This will stop other t" &
+        "ext like this window contaminating the results")
+        '
+        'RecalcScreenResButton
+        '
+        Me.RecalcScreenResButton.Location = New System.Drawing.Point(193, 192)
+        Me.RecalcScreenResButton.Name = "RecalcScreenResButton"
+        Me.RecalcScreenResButton.Size = New System.Drawing.Size(67, 51)
+        Me.RecalcScreenResButton.TabIndex = 4
+        Me.RecalcScreenResButton.Text = "Recalc Screen Resolution"
+        Me.ToolTip1.SetToolTip(Me.RecalcScreenResButton, "Add the entered system name to the list of official SEPP Systems")
+        Me.RecalcScreenResButton.UseVisualStyleBackColor = True
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(224, 249)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(161, 13)
+        Me.Label10.TabIndex = 7
+        Me.Label10.Text = "For people using Terra's laptop ^"
+        Me.ToolTip1.SetToolTip(Me.Label10, "Set how much of the screen to look at when capturing text. This will stop other t" &
+        "ext like this window contaminating the results")
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(388, 140)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(18, 13)
+        Me.Label11.TabIndex = 68
+        Me.Label11.Text = "px"
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(389, 166)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(18, 13)
+        Me.Label12.TabIndex = 69
+        Me.Label12.Text = "px"
+        '
+        'TestOcrButton
+        '
+        Me.TestOcrButton.Location = New System.Drawing.Point(292, 189)
+        Me.TestOcrButton.Name = "TestOcrButton"
+        Me.TestOcrButton.Size = New System.Drawing.Size(93, 54)
+        Me.TestOcrButton.TabIndex = 6
+        Me.TestOcrButton.Text = "Test OCR"
+        Me.ToolTip1.SetToolTip(Me.TestOcrButton, "Add the entered system name to the list of official SEPP Systems")
+        Me.TestOcrButton.UseVisualStyleBackColor = True
+        '
         'SeppOcrClient
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -791,4 +898,13 @@ Partial Class SeppOcrClient
     Friend WithEvents EnteredByLabel As Label
     Friend WithEvents ScanningPanel As Panel
     Friend WithEvents Label5 As Label
+    Friend WithEvents Label12 As Label
+    Friend WithEvents Label11 As Label
+    Friend WithEvents Label10 As Label
+    Friend WithEvents RecalcScreenResButton As Button
+    Friend WithEvents Label8 As Label
+    Friend WithEvents GameScreenHeight As TextBox
+    Friend WithEvents Label6 As Label
+    Friend WithEvents GameScreenWidth As TextBox
+    Friend WithEvents TestOcrButton As Button
 End Class
