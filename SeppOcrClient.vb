@@ -411,7 +411,7 @@ Public Class SeppOcrClient
 
     Private Sub SystemNameBox_TextChanged(sender As Object, e As EventArgs) Handles SystemNameBox.TextChanged
         AddButton.Enabled = Len(SystemNameBox.Text) > 0
-        RemoveButton.Enabled = Len(SystemNameBox.Text) = 0
+        RemoveButton.Enabled = Len(SystemNameBox.Text) > 0
     End Sub
 
     Private Sub RecalcScreenResButton_Click(sender As Object, e As EventArgs) Handles RecalcScreenResButton.Click

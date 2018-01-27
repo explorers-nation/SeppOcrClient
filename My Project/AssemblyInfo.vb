@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Sepps Client")>
+<Assembly: AssemblyTitle("Sepp Client")>
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("Sepps Client")>
-<Assembly: AssemblyCopyright("Copyright ©  Sepps Tools 2017")>
+<Assembly: AssemblyProduct("Sepp Client")>
+<Assembly: AssemblyCopyright("Copyright © Sepp Tools 2017")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -32,4 +32,4 @@ Imports System.Runtime.InteropServices
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
 <Assembly: AssemblyVersion("1.6.*")>
-<Assembly: AssemblyFileVersion("1.6.3.0")>
+<Assembly: AssemblyFileVersion("1.6.4.0")>

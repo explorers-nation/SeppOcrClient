@@ -31,7 +31,7 @@
     <PublisherName>Sepps Tools</PublisherName>
     <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.6.3.%2a</ApplicationVersion>
+    <ApplicationVersion>1.6.4.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
